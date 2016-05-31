@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+<!--Scripts-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>   
+ <link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>    <!--google Fonts-->
+ <link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
+ <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+
+ <link href='style.css' rel='stylesheet' type='text/css'>
+ <link href='select_style.css' rel='stylesheet' type='text/css'>
+ <link href='search_button.css' rel='stylesheet' type='text/css'>
+ <link href='popups.css' rel='stylesheet' type='text/css'>
+  
+</head>
+<body onload=sort("Title")>
+	<div id="sortDiv"><span id="sortBy"> SortBy</span>
+		
+<button id="sortButton" onclick=sort("Title")>Title</button>		
+		<button id="sortButton" onclick=sort("Year")>Year</button>		
+		<res style='width:80px;height:40px;margin-top:15px;float:right;margin-left:70px;margin-right:100px;'><img src="trans.png" height="30px" width="60px"><!--<h1>OMDB API</h1>--></res>
+	
+	</div>
+
+<div class="alert success">
+  <span class="closebtn">&#10004</span>  
+  <strong>Hello!</strong>&nbsp Filter is available!!&nbsp why not try it?
+</div>
+
+		<div class="alert">
+  <span class="closebtn">&#10004</span>  
+  <strong>Notice!</strong>&nbsp Please open this is 
+  <strong>Firefox Browser.</strong> Chrome does not suppourt 
+  properly with loading json files locally rather than URL.Thank you!!	
+</div>
+<div class="alert warning">
+  <span class="closebtn">&#10004</span>  
+  <strong>Hey there!</strong> &nbsp Is this site responsive Check it out..?.
+</div>
+	</div>
+	
+<script>
+var parentDiv=document.createElement("div");
+parentDiv.setAttribute("id","parentDiv");
+parentDiv.setAttribute("class","card");
+
+function sort(type) {
+	  $("#parentDiv").empty();
+    $.getJSON("data.json", ({ Search }) => {   
+        Search.sort((a, b) => a[type] > b[type]);
+        console.log(`Sorted by: ${type}`);
+		console.log("movies are displayed!!");
+		var i;
+
+for(i=0;i<Search.length;i++){
+//console.log(Search.length);     
+
+var title=Search[i].Title;
+
+var year=Search[i].Year;
+
+var posterUrl=Search[i].Poster;
+
+<!--------Card Layout------->
+var childDiv=document.createElement("figure");
+childDiv.setAttribute("id","childDiv");
+childDiv.setAttribute("class","slideEffect");
+
+<!--------Poster------->
+var posterDiv=document.createElement("img");
+posterDiv.setAttribute("id","posterDiv");
+posterDiv.setAttribute("class","image");
+posterDiv.setAttribute("src",posterUrl);
+childDiv.appendChild(posterDiv);
+
+/*var posterDiv=document.createElement("Div");
+posterDiv.setAttribute("id","posterDiv");
+posterDiv.setAttribute("alt",title);
+posterDiv.style.backgroundImage="url("+ posterUrl +")";
+*/
+
+//Poster.setAttribute("src",poster);
+var dataDiv=document.createElement("figcaption");
+dataDiv.setAttribute("id","dataDiv");
+
+<!--Title Here-->
+var titleElement=document.createElement("h2");
+titleElement.setAttribute("id","moviename");
+dataDiv.appendChild(titleElement);
+
+<!--icons popup-->
+var icons=document.createElement("icon");
+icons.setAttribute("class","icon-links");
+
+<!--Eye icon-->
+var eyeAnchor=document.createElement("a");
+eyeAnchor.setAttribute("href","#");
+eyeSpan=document.createElement("span");
+eyeSpan.setAttribute("class","year");
+eyeAnchor.appendChild(eyeSpan);      //appending
+icons.appendChild(eyeAnchor);
+
+dataDiv.appendChild(icons);    //appending
+
+<!--Description Here-->
+var description=document.createElement("p");
+description.setAttribute("class","description");
+dataDiv.appendChild(description);
+
+childDiv.appendChild(dataDiv);
+parentDiv.appendChild(childDiv);
+document.body.appendChild(parentDiv);
+
+document.getElementsByTagName("h2")[i].innerHTML="<b>" + "WATCH"+ "&nbsp&nbsp&nbsp&nbsp"+"NOW"+ "&nbsp&nbsp&nbsp&nbsp"+"&#x25ba"+"</b><br>";
+document.getElementsByTagName("p")[i].innerHTML= "<b>" + title + "</b><br>";	
+document.getElementsByClassName("year")[i].innerHTML= "year:"+ "&nbsp" +year;
+}
+	}
+   
+   )};
+   
+ /*-----popups----------*/
+ 
+var close = document.getElementsByClassName("closebtn");
+var i;
+
+for (i = 0; i < close.length; i++) {
+    close[i].onclick = function(){
+        var div = this.parentElement;
+		var opac=document.getElementById("parentDiv");
+		div.style.opacity = "0";
+		
+        setTimeout(function(){ div.style.display = "none";opac.style.opacity="1"; },3000);
+    }
+}
+ /*---------popups end------------*/  
+
+function show(){
+    var z=document.getElementById("sortOrder").value;
+	sort(z);
+
+	};
+	
+
+//sort('Year');
+//sort('Title');
+
+</script>
+</body>
+</html>
